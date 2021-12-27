@@ -1,7 +1,7 @@
 <h1>Mock Product Store Api</h1>
 <hr>
 
-<h3>A mock api to perform CRUD operations on the database</h3>
+<h3>A mock api to perform filter/sort query operations on the database</h3>
 <hr>
 
 <p>Supported GET parameters</p>
