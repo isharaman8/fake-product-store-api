@@ -4,7 +4,30 @@
 <h3>A mock api to perform filter/sort query operations on the database</h3>
 <hr>
 
-<p>Supported GET parameters</p>
+<h2>Endpoints</h2>
+<p>Supported POST endpoints</p>
+<ul>
+  <li><strong>/products</strong>: create product</li>
+</ul>
+
+<p>Supported GET endpoints</p>
+<ul>
+  <li><strong>/products</strong>: get all products (pagination - 10 per request if no query is provided)</li>
+  <li><strong>/products/:productID</strong>: get one product by id</li>
+</ul>
+
+<p>Supported Patch endpoints</p>
+<ul>
+  <li><strong>/products/:productID</strong>: update product</li>
+</ul>
+
+<p>Supported Delete endpoints</p>
+<ul>
+  <li><strong>/products/:productID</strong>: delete product</li>
+</ul>
+<hr>
+
+<h2>GET queries</h2>
 <ul>
   <li><strong>featured (boolean)</strong>: returns all the products that featured or not according to query provided</li>
   
