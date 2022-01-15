@@ -13,21 +13,22 @@ const getAllProductsStatic = async (req, res) => {
 /* MAIN ROUTES */
 const getSingleProduct = async (req, res) => {
 	try {
-		redis.get(`allProducts.${req.params.id}`, async function (err, product) {
-			if (err) console.log(err);
-			if (product) {
-				let sendProduct = JSON.parse(product);
-				return res.status(200).send({ sendProduct, redis: true });
-			} else {
-				try {
-					const product = await Product.findById(req.params.id);
-					redis.set(`allProducts.${req.params.id}`, JSON.stringify(product));
-					return res.status(200).send({ product, redis: false });
-				} catch (err) {
-					console.log(err);
-				}
+		const product = await redis.get(`allProducts.${req.params.id}`);
+		if (product) {
+			let sendProduct = JSON.parse(product);
+			return res.status(200).send({ sendProduct, redis: true });
+		} else {
+			try {
+				const getProduct = await Product.findById(req.params.id);
+				await redis.set(
+					`allProducts.${req.params.id}`,
+					JSON.stringify(getProduct)
+				);
+				return res.status(200).send({ getProduct, redis: false });
+			} catch (err) {
+				console.log(err);
 			}
-		});
+		}
 	} catch (err) {
 		console.log(err);
 		return res.status(500).send({ error: err.message });
@@ -105,24 +106,25 @@ const getAllProducts = async (req, res) => {
 // Create Route
 const createProduct = async (req, res) => {
 	try {
-		redis.get(`allProducts`, async function (err, products) {
-			const product = await Product.create(req.body);
-			if (err) console.log(err);
+		// redis.get(`allProducts`, async function (err, products) {
+		const product = await Product.create(req.body);
 
-			if (products) {
-				const parsedProducts = JSON.parse(products);
-				const newProducts = [...parsedProducts, product];
-				redis.set(`allProducts`, JSON.stringify(newProducts));
-			} else {
-				const insertProducts = await Product.find().lean().exec();
-				try {
-					redis.set(`allProducts`, JSON.stringify(insertProducts));
-				} catch (err) {
-					console.log(err);
-				}
+		await redis.set(`allProducts.${product._id}`, JSON.stringify(product));
+		const products = await redis.get(`allProducts`);
+		if (products) {
+			const parsedProducts = JSON.parse(products);
+			const newProducts = [...parsedProducts, product];
+			await redis.set(`allProducts`, JSON.stringify(newProducts));
+		} else {
+			const insertProducts = await Product.find().lean().exec();
+			try {
+				await redis.set(`allProducts`, JSON.stringify(insertProducts));
+			} catch (err) {
+				console.log(err);
 			}
-			return res.status(201).send(product);
-		});
+		}
+		return res.status(201).send(product);
+		// });
 	} catch (err) {
 		console.log("Error", err);
 		return res.status(500).send({ error: err.message });
@@ -132,20 +134,17 @@ const createProduct = async (req, res) => {
 // Patch Route
 const patchProduct = async (req, res) => {
 	try {
-		redis.get(`allProducts.${req.params.id}`, async function (err, product) {
-			if (err) console.log(err);
-			const oneProduct = await Product.findByIdAndUpdate(
-				req.params.id,
-				req.body,
-				{ new: true }
-			);
-			redis.set(`allProducts.${req.params.id}`, JSON.stringify(oneProduct));
+		const oneProduct = await Product.findByIdAndUpdate(
+			req.params.id,
+			req.body,
+			{ new: true }
+		);
+		await redis.set(`allProducts.${req.params.id}`, JSON.stringify(oneProduct));
 
-			const products = await Product.find().lean().exec();
-			redis.set("allProducts", JSON.stringify(products));
+		const products = await Product.find().lean().exec();
+		await redis.set("allProducts", JSON.stringify(products));
 
-			return res.status(201).send(oneProduct);
-		});
+		return res.status(201).send(oneProduct);
 	} catch (err) {
 		console.log("Error", err);
 		return res.status(500).send({ error: err.message });
@@ -154,15 +153,17 @@ const patchProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
 	try {
-		redis.get(`allProducts.${req.params.id}`, async function (err, product) {
-			if (err) console.log(err);
-
-			if (product) {
-				redis.del(`allProducts.${req.params.id}`);
-			}
-			const delProduct = await Product.findByIdAndDelete(req.params.id);
-			return res.status(200).send(delProduct);
-		});
+		// redis.get(`allProducts.${req.params.id}`, async function (err, product) {
+		const jsonProduct = await redis.get(`allProducts.${req.params.id}`);
+		const product = JSON.parse(jsonProduct);
+		if (product) {
+			redis.del(`allProducts.${req.params.id}`);
+		}
+		const products = await Product.find().lean().exec();
+		await redis.set(`allProducts`, JSON.stringify(products));
+		const delProduct = await Product.findByIdAndDelete(req.params.id);
+		return res.status(200).send(delProduct);
+		// });
 	} catch (err) {
 		console.log(err);
 		return res.status(500).send({ error: err.message });
