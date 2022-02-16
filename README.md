@@ -27,6 +27,9 @@
 </ul>
 <hr>
 
+<h3>Mini Demonstration</h3>
+<img src="https://user-images.githubusercontent.com/53399843/154225509-e9b94ba7-d8f0-488b-83d9-211da6bbc80f.gif" alt="" />
+
 <h2>GET queries</h2>
 <ul>
   <li><strong>featured (boolean)</strong>: returns all the products that featured or not according to query provided</li>
