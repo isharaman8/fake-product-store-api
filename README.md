@@ -44,3 +44,5 @@
 <h3>How to use?</h3>
 
 <p>To make it working, connect your own database by providing your connection string. To fill products in your database, use populate.js<p>
+  
+<p>Try it out <a href="https://boiling-falls-19372.herokuapp.com/">Here</a><p>
