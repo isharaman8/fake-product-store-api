@@ -1,0 +1,25 @@
+.single-component {
+	background-color: #e8e8e8;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+	min-width: 300px;
+
+	& > p {
+		margin: 5px 0;
+		padding: 0px;
+		font-size: 15px;
+	}
+
+	& > .timestamps {
+		color: gray !important;
+		margin-top: 25px;
+		font-size: 12px;
+		width: 100%;
+		text-align: right;
+	}
+}
+
+.bold {
+	font-weight: 600;
+}

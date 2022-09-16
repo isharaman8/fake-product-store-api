@@ -1,3 +1,5 @@
+@import "../styles/globals.scss";
+
 #home_box {
 	margin-top: 100px;
 	min-height: calc(100vh - 100px);
@@ -6,4 +8,42 @@
 	justify-content: start;
 	align-items: center;
 	flex-direction: column;
+	padding-bottom: 20px;
+
+	& > .pagination {
+		margin: 10px;
+		margin-bottom: 20px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+
+		& > button {
+			padding: 10px;
+			font-size: 18px;
+			border-radius: 10px;
+			border: none;
+			font-weight: 600;
+
+			&:hover {
+				cursor: pointer;
+				box-shadow: 0 0 5px 0 rgba(0, 0, 0);
+			}
+		}
+	}
+
+	& > .grid {
+		display: grid;
+		grid-template-columns: repeat(4, auto);
+		gap: 20px;
+		place-content: center;
+
+		@include ipad {
+			grid-template-columns: repeat(3, auto);
+		}
+
+		@include mobile {
+			grid-template-columns: repeat(2, auto);
+		}
+	}
 }

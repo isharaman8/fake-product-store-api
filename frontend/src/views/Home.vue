@@ -3,47 +3,80 @@ import axios from "axios";
 import { PROD_API } from "../constants/api";
 import LoadingScreen from "../components/LoadingScreen.vue";
 import SingleComponent from "../components/Home/SingleComponent.vue";
+
 export default {
 	data: () => {
 		return {
 			loading: false,
 			products: [],
+			page: 1,
 		};
 	},
-	created() {
-		this.loading = true;
-		const API = `${PROD_API}/api/v1/products`;
-		axios
-			.get(API)
-			.then((data) => {
-				console.log(data.data);
-				if (data.data.products) this.products = data.data.products;
-				else throw new Error("Something went wrong");
-			})
-			.catch((err) => console.log(err))
-			.finally(() => {
-				this.loading = false;
-			});
+	methods: {
+		prevPage() {
+			if (this.page <= 1) return;
+			this.page--;
+		},
+
+		nextPage() {
+			if (this.page >= 3) return;
+			this.page++;
+		},
+
+		fetchProds() {
+			this.loading = true;
+			const API = `${PROD_API}/api/v1/products?page=${this.page}`;
+			axios
+				.get(API)
+				.then((data) => {
+					if (data.data.products) this.products = data.data.products;
+					else throw new Error("Something went wrong");
+				})
+				.catch((err) => console.log(err))
+				.finally(() => {
+					this.loading = false;
+				});
+		},
 	},
+
+	watch: {
+		page() {
+			this.fetchProds();
+		},
+	},
+
+	created() {
+		this.fetchProds();
+	},
+
 	components: { LoadingScreen, SingleComponent },
 };
 </script>
 
 <template>
-	<div id="home_box" v-if="!loading">
+	<div id="home_box">
 		<h1>View Products</h1>
-		<div class="grid">
+		<div class="pagination">
+			<button @click="prevPage">Prev</button>
+			<p>Page {{ page }} of 3</p>
+			<button @click="nextPage">Next</button>
+		</div>
+
+		<div class="grid" v-if="!loading">
 			<SingleComponent
-				name="Modern Bookshelf"
-				price="31"
-				:featured="true"
-				company="Caressa"
+				v-for="elem in products"
+				:name="elem.name"
+				:price="elem.price"
+				:featured="elem.featured"
+				:company="elem.company"
+				:createdAt="elem.createdAt"
+				:key="elem._id"
 			/>
 		</div>
+		<LoadingScreen v-else />
 	</div>
-	<LoadingScreen v-else />
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "../styles/home.scss";
 </style>

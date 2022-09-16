@@ -1,0 +1,16 @@
+$mainColor: #15023a;
+$mobileWidth: 900px;
+$padWidth: 1200px;
+$mainLightColor: rgb(249, 243, 237);
+
+@mixin mobile {
+	@media screen and (max-width: #{$mobileWidth}) {
+		@content;
+	}
+}
+
+@mixin ipad {
+	@media screen and (max-width: #{$padWidth}) {
+		@content;
+	}
+}

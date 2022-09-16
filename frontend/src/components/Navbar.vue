@@ -38,9 +38,12 @@ export default {
 				:key="item"
 				:class="{ underline: current_select[item] }"
 			>
-				<router-link class="nav-link" :to="item === 'Home' ? '/' : item">{{
-					item
-				}}</router-link>
+				<router-link
+					style="text-decoration: none; color: black"
+					class="nav-link"
+					:to="item === 'Home' ? '/' : item"
+					>{{ item }}</router-link
+				>
 			</li>
 		</ul>
 	</div>

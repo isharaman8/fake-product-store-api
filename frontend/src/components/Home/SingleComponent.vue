@@ -5,17 +5,25 @@ export default {
 		company: null,
 		featured: false,
 		price: 0,
+		createdAt: null,
 	},
 };
 </script>
 
 <template>
 	<div class="single-component">
-		<p>Product Name: {{ name }}</p>
-		<p>Company Name: {{ company }}</p>
-		<p>Price: {{ price }}</p>
-		<p>Featured: {{ featured ? "Yes" : "No" }}</p>
+		<h2>{{ name }}</h2>
+		<!-- <p><span class="bold">Product Name</span>: {{ name }}</p> -->
+		<p><span class="bold">Company Name</span>: {{ company }}</p>
+		<p><span class="bold">Price</span>: {{ price }}</p>
+		<p><span class="bold">In Features</span>: {{ featured ? "Yes" : "No" }}</p>
+		<p class="timestamps">
+			<span class="bold">Created At</span>
+			{{ new Date(createdAt).toDateString() }}
+		</p>
 	</div>
 </template>
 
-<style></style>
+<style lang="scss">
+@import "../../styles/singlecomponent.scss";
+</style>
