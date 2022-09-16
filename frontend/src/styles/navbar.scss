@@ -1,0 +1,31 @@
+#navbar {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	min-height: 90px;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0);
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	background-color: white;
+
+	& .logo {
+		cursor: pointer;
+	}
+
+	.horizontal-list {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		list-style-type: none;
+		gap: 15px;
+		cursor: pointer;
+
+		& > li {
+			font-size: 20px;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
