@@ -23,9 +23,27 @@
 
 		& > li {
 			font-size: 20px;
+			color: black;
 			&:hover {
 				text-decoration: underline;
 			}
+			&:visited {
+				color: black;
+			}
+		}
+
+		& > .nav-link {
+			color: black !important;
+			display: block;
+
+			&:visited {
+				color: black !important;
+				display: block;
+			}
 		}
 	}
+}
+
+.underline {
+	text-decoration: underline;
 }

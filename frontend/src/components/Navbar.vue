@@ -3,7 +3,27 @@ export default {
 	data: () => {
 		return {
 			login_arr: ["Home", "Cart"],
+			current_select: {
+				Home: true,
+				Cart: false,
+			},
 		};
+	},
+	methods: {
+		handleCurrentSelect(value) {
+			if (value === "Home") {
+				this.current_select["Home"] = true;
+				this.current_select["Cart"] = false;
+			} else {
+				this.current_select["Home"] = false;
+				this.current_select["Cart"] = true;
+			}
+		},
+	},
+	watch: {
+		current_select(new_val) {
+			console.log(`Current selected tab:`, new_val);
+		},
 	},
 };
 </script>
@@ -12,8 +32,15 @@ export default {
 	<div id="navbar">
 		<h2 class="logo">Fake Product Store</h2>
 		<ul class="horizontal-list">
-			<li v-for="item in login_arr" :key="item">
-				{{ item }}
+			<li
+				@click="handleCurrentSelect(item)"
+				v-for="item in login_arr"
+				:key="item"
+				:class="{ underline: current_select[item] }"
+			>
+				<router-link class="nav-link" :to="item === 'Home' ? '/' : item">{{
+					item
+				}}</router-link>
 			</li>
 		</ul>
 	</div>
